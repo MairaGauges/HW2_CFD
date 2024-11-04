@@ -1,6 +1,6 @@
 % -------------------------------------------------------------------------
 % VERY SIMPLE FIRST APPROACH
-% Upwind in space + Euler in time + Initial condition square wave
+% Upwind in space + Explicit Euler in time + Initial condition square wave
 % -------------------------------------------------------------------------
 
 a = 1;            
@@ -17,19 +17,35 @@ C = a*dt/dx; % like this or should I define dt based on C that I know is stable?
 
 % Initial condition
 phi_0 = (x >= -0.6) & (x <= -0.4);
-phi = phi_0;                           
-
-% is 1 revolution 1 time step???
-% Upwind in space and explicit euler in time + periodic BC
-phi_new = phi - a*dt/dx * (phi-[phi(end),phi(1:end-1)]);
+phi = phi_0;   
+phi_new = phi;
 
 figure;
-plot(x, phi_0); 
+plot(x, phi_0,'DisplayName','Initial Condition'); 
 hold on;
-plot(x, phi_new);
-legend('Initial condition', 'After one revolution');
+eachplot = plot(x, phi,'DisplayName','Solution');
+legend show;
 xlabel('x'); 
 ylabel('\phi');
+
+% is 1 revolution 2??? 
+% Upwind in space and explicit euler in time + periodic BC
+for i = 0:dt:2
+    phi_new = phi - a*dt/dx * (phi-[phi(end),phi(1:end-1)]);
+    phi = phi_new;
+    
+    set(eachplot, 'YData', phi);
+    drawnow;
+
+end
+
+% figure;
+% plot(x, phi_0); 
+% hold on;
+% plot(x, phi_new);
+% legend('Initial condition', 'After one revolution');
+% xlabel('x'); 
+% ylabel('\phi');
 
 
 
