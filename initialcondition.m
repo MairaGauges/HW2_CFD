@@ -36,11 +36,12 @@ for i = 1:n_cells
     end
 end
 
-figure;
-plot(x, phi_0);
-xlabel('x');
-ylabel('\phi');
-title('Initial Condition');
+% uncomment if running only this function alone
+% figure;
+% plot(x, phi_0);
+% xlabel('x');
+% ylabel('\phi');
+% title('Initial Condition');
 
 
 end
