@@ -75,4 +75,9 @@ xlabel('Wavenumber');
 ylabel('Dispersive Error');
 title('Dispersive Error');
 
+xt = xticks;
+yt = yticks;
+xticklabels(arrayfun(@(x) sprintf('%.2f', x), xt, 'UniformOutput', false));
+yticklabels(arrayfun(@(y) sprintf('%.2f', y), yt, 'UniformOutput', false));
+
 end
