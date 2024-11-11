@@ -16,7 +16,7 @@ G = @(x, beta, z) exp(-beta * (x - z).^2);
 
 F = @(x, alpha, a_elipse) sqrt(max(1 - alpha^2 * (x - a_elipse).^2, 0));
 
-phi_0 = zeros(1, n_cells);
+phi_0 = zeros(n_cells,1);
 
 for i = 1:n_cells
     if x(i) >= -0.8 && x(i) <= -0.6
