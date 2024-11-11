@@ -35,7 +35,7 @@ A(1,end) = -lambda;
 % Upwind in space and implicit euler in time + periodic BC
 for i = 0:dt:2
     
-    phi_new = (A \ phi')';
+    phi_new = A \ phi;
     phi = phi_new;
 
     % if mod(i,2) < dt
@@ -47,3 +47,4 @@ end
 
 plot(x, phi,'DisplayName','Solution','LineStyle', '--','LineWidth', 1);
 
+[diffusive_error,dispersive_error] = error_calculation(x_max,x_min,n_cells,C,a,method);
