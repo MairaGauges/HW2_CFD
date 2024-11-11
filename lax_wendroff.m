@@ -34,8 +34,15 @@ for n = 0:dt:2
 
     end
 
-    phi_new(1) = phi_new(n_cells-1);
-    phi_new(n_cells) = phi_new(2);
+    phi_new(1) = phi(1) - (C/2) * (phi(2) - phi(n_cells)) + ...
+               (C^2/2) * (phi(2) - 2 * phi(1) + phi(n_cells));
+    
+    
+    phi_new(n_cells) = phi(n_cells) - (C/2) * (phi(1) - phi(n_cells-1)) + ...
+               (C^2/2) * (phi(1) - 2 * phi(n_cells) + phi(n_cells-1));
+
+    %phi_new(n_cells-1);
+    %phi_new(n_cells) = phi_new(2);
 
     phi = phi_new;
 
@@ -44,5 +51,5 @@ end
 
 plot(x, phi,'DisplayName','Solution','LineStyle', '--','LineWidth', 1);
 
-[diffusive_error,dispersive_error] = error_calculation(x_max,x_min,n_cells,C,a,method);
+%[diffusive_error,dispersive_error] = error_calculation(x_max,x_min,n_cells,C,a,method);
 
