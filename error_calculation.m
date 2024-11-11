@@ -30,7 +30,12 @@ for idx = 1:length(k_values)
     
             case 'implicit' % Implicit Euler with upwind scheme
                 G_numerical = 1 / (1 + C * (1 - cos(k*dx) - 1i * sin(k*dx)));
-            
+
+            case 'lax-wendroff'
+                G_numerical = 1 - 1i*C*sin(k*dx) - (C^2)*(1-cos(k*dx));
+
+            case 'crank-nicolson'
+                G_numerical = (1 - 1i*(C/2)*sin(k*dx))/(1 + 1i*(C/2)*sin(k*dx));
     
             otherwise
                 error_calculation('ups');
@@ -39,7 +44,6 @@ for idx = 1:length(k_values)
     diffusive_error(idx) = abs(G_numerical)/abs(G_exact);
 
     dispersive_error(idx) = angle(G_numerical)/angle(G_exact);
-    % dispersive_error(idx) = angle(G_numerical)/(-C*k*dx);
 
     G_values(idx) = G_numerical;
 end
