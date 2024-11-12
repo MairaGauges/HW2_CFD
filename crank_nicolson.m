@@ -12,7 +12,7 @@ n_cells = 200;
 x = linspace(x_min, x_max, n_cells);
 
 dx = (x_max-x_min)/(n_cells-1); 
-C = 0.8; % Courant
+C = 2; % Courant
 dt = C*dx/a;
 
 phi = initialcondition(n_cells,x_min,x_max); 

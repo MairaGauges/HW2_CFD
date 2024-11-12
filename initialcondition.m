@@ -30,7 +30,7 @@ for i = 1:n_cells
 
     elseif x(i) >= 0.4 && x(i) <= 0.6
         phi_0(i) = (1/6) * (F(x(i), alpha, a_elipse - delta) + F(x(i), alpha, a_elipse + delta) + 4 * F(x(i), alpha, a_elipse));
-   
+
     else
         phi_0(i) = 0;
     end

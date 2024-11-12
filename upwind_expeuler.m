@@ -27,7 +27,7 @@ ylabel('\phi');
 
 for i = 0:dt:2
 
-    phi_new = phi - a*dt/dx * (phi-[phi(end),phi(1:end-1)]);
+    phi_new = phi - C * (phi-[phi(end);phi(1:end-1)]);
     phi = phi_new;
 
 end

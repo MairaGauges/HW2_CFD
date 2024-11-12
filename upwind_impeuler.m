@@ -12,7 +12,7 @@ n_cells = 200;
 x = linspace(x_min, x_max, n_cells);
 
 dx = (x_max-x_min)/(n_cells-1); 
-C = 0.8; % Courant
+C = 1; % Courant
 dt = C*dx/a;
 
 % Initial condition
@@ -27,10 +27,9 @@ legend show;
 xlabel('x'); 
 ylabel('\phi');
 
-lambda = a*dt/dx;
 
-A = (1 + lambda) * eye(n_cells) - lambda * diag(ones(n_cells-1,1), -1);
-A(1,end) = -lambda;
+A = (1 + C) * eye(n_cells) - C * diag(ones(n_cells-1,1), -1);
+A(1,end) = -C;
 
 % Upwind in space and implicit euler in time + periodic BC
 for i = 0:dt:2
