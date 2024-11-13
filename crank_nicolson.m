@@ -1,6 +1,6 @@
 % -------------------------------------------------------------------------
 % Solution for the advection equation
-% Crank-Nicolson scheme
+% Central differences in space + Crank-Nicolson in time
 % -------------------------------------------------------------------------
 
 method = 'crank-nicolson';
@@ -44,4 +44,4 @@ end
 
 plot(x, phi,'DisplayName','Solution','LineStyle', '--','LineWidth', 1);
 
-[diffusive_error,dispersive_error] = error_calculation(x_max,x_min,n_cells,C,a,method);
+[diffusive_error,dispersive_error] = error_calculation(n_cells,C,method);
