@@ -5,11 +5,6 @@
 
 function [diffusive_error,dispersive_error] = error_calculation(n_cells,C,method)
 
-% dx = (x_max-x_min)/(n_cells-1);
-% dt = C*dx/a;
-
-% k_values = linspace(-(pi/dx-pi*(n_cells*dx)), pi/dx-pi*(n_cells*dx), n_cells);
-% k_values = linspace(-pi/dx,pi/dx,n_cells);
 theta_values = linspace(0,pi,n_cells);
 
 diffusive_error = zeros(size(theta_values));
@@ -19,30 +14,37 @@ G_exact_values = zeros(size(theta_values));
 
 for idx = 1:length(theta_values)
 
-    % k = k_values(idx); 
     theta = theta_values(idx);
 
-    % G_exact = exp(-1i*a*k*dt);
     G_exact = exp(-1i*C*theta);
      
    switch method
-            case 'explicit'  % Explicit Euler with upwind scheme
-                G_numerical = 1 - C + C * (cos(theta) - 1i*sin(theta));
-    
-            case 'implicit' % Implicit Euler with upwind scheme
-                G_numerical = 1 / (1 + C * (1 - cos(theta) - 1i * sin(theta)));
 
-            case 'lax-wendroff'
-                G_numerical = 1 - 1i*C*sin(theta) - (C^2)*(1-cos(theta));
-
-            case 'crank-nicolson'
-                G_numerical = (1 - 1i*(C/2)*sin(theta))/(1 + 1i*(C/2)*sin(theta));
-    
-            otherwise
-                fprintf('ups');
+        case 'explicit'  % Explicit Euler with upwind scheme
+            G_numerical = 1 - C + C * (cos(theta) - 1i*sin(theta));
+        
+        case 'implicit' % Implicit Euler with upwind scheme
+            G_numerical = 1 / (1 + C*(1 - cos(theta) + 1i*sin(theta)));
+        
+        case 'lax-wendroff'
+            G_numerical = 1 - 1i*C*sin(theta) + (C^2)*(cos(theta)-1);
+        
+        case 'crank-nicolson' % Crank-Nicolson with upwind 
+            G_numerical = (1 - 1i*(C/2)*sin(theta)) / (1 + 1i*(C/2)*sin(theta));
+        
+        case 'leap-frog'
+            if C<=1
+                G_numerical = -C*1i*sin(theta)+sqrt(-C^2*(sin(theta)^2)+1);
+            end
+            if C>1
+                G_numerical = -C*1i*sin(theta)+sqrt(-C^2*(sin(theta)^2)+1);
+            end
+        
+        otherwise
+            fprintf('ups');
+            break
     end
-    
-    % diffusive_error(idx) = abs(G_numerical)/abs(G_exact);
+
     diffusive_error(idx) = abs(G_numerical);
 
     % phase_numerical = angle(G_numerical);
@@ -62,19 +64,15 @@ for idx = 1:length(theta_values)
 
 end
 
-% figure;
-% plot(real(G_exact_values), imag(G_exact_values));
-% axis equal;
-
 figure;
-plot(real(G_values), imag(G_values), 'b-','LineWidth', 0.8);
+plot(real(G_values), imag(G_values), 'b-','LineWidth', 1.5);
 hold on;
-plot(real(G_values), -imag(G_values),'b-','LineWidth', 0.8);
+plot(real(G_values), -imag(G_values),'b-','LineWidth', 1.5);
 hold on;
 alpha = linspace(0, 2*pi, n_cells); 
 x_circle = cos(alpha); 
 y_circle = sin(alpha); 
-plot(x_circle, y_circle, 'k--', 'LineWidth', 1.5);
+plot(x_circle, y_circle, 'k--', 'LineWidth', 0.8);
 
 title('Stability diagram');
 xlabel('Re(G)');
