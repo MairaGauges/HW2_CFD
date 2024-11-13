@@ -12,11 +12,10 @@ n_cells = 200;
 x = linspace(x_min, x_max, n_cells);
 
 dx = (x_max-x_min)/(n_cells-1); 
-C = 1; % Courant
-dt = C*dx/a;
+C_numbers = [0.1, 0.5, 0.8, 1]; % Courant
 
-phi = initialcondition(n_cells,x_min,x_max); 
-phi_new = phi;
+phi_0 = initialcondition(n_cells,x_min,x_max); 
+phi = phi_0;
 
 figure;
 plot(x, phi,'DisplayName','Initial Condition','LineWidth', 0.8); 
@@ -24,14 +23,22 @@ hold on;
 legend show;
 xlabel('x'); 
 ylabel('\phi');
+title('Solution for the advection equation using Upwind and Explicit Euler');
 
-for i = 0:dt:2
+for C = C_numbers
 
-    phi_new = phi - C * (phi-[phi(end);phi(1:end-1)]);
-    phi = phi_new;
+    dt = C*dx/a;
+    phi = phi_0;
+    
+    for i = 0:dt:2
+    
+        phi_new = phi - C * (phi-[phi(end);phi(1:end-1)]);
+        phi = phi_new;
+    
+    end
+
+    plot(x, phi,'DisplayName',sprintf('C = %.1f', C),'LineStyle', '--','LineWidth', 1);
 
 end
 
-plot(x, phi,'DisplayName','Solution','LineStyle', '--','LineWidth', 1);
-
-[diffusive_error,dispersive_error] = error_calculation(n_cells,C,method);
+[diffusive_error,dispersive_error] = error_calculation(n_cells,C_numbers,method);
