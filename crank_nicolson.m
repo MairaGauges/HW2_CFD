@@ -3,7 +3,7 @@
 % Central differences in space + Crank-Nicolson in time
 % -------------------------------------------------------------------------
 
-method = 'crank-nicolson';
+method = 'crank-nicolson'; % label for the stability plot and error calculation
 
 a = 1;            
 x_min = -1;         
@@ -12,7 +12,7 @@ n_cells = 200;
 x = linspace(x_min, x_max, n_cells);
 
 dx = (x_max-x_min)/(n_cells-1); 
-C_numbers = [0.1, 0.5, 0.8, 1]; % Courant
+C_numbers = [0.5,0.8]; % Courant numbers, needs to be kept as a vector
 
 phi_0 = initialcondition(n_cells,x_min,x_max); 
 phi = phi_0;

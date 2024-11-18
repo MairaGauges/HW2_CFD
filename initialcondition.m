@@ -43,5 +43,4 @@ end
 % ylabel('\phi');
 % title('Initial Condition');
 
-
 end

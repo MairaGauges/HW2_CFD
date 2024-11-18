@@ -3,7 +3,7 @@
 % Central differences in space + Leap-frog in time
 % -------------------------------------------------------------------------
 
-method = 'leap-frog';
+method = 'leap-frog'; % label for the stability plot and error calculation
 
 a = 1;            
 x_min = -1;         
@@ -12,9 +12,8 @@ n_cells = 200;
 x = linspace(x_min, x_max, n_cells);
 
 dx = (x_max-x_min)/(n_cells-1); 
-C_numbers = [0.1, 0.5, 0.8, 1]; % Courant
+C_numbers = [0.1,0.5,0.8,1]; % Courant numbers, needs to be kept as a vector
 
-% C = 1.1; % Courant
 
 phi_0 = initialcondition(n_cells,x_min,x_max);
 phi = phi_0;
@@ -31,9 +30,20 @@ for C = C_numbers
 
     dt = C*dx/a;
     phi_old = phi; % level n-1
-    phi_new = phi; % level n+1
 
-    for i = 0:dt:2
+    % Using Crank-Nicolson to compute the first level n
+
+    alpha = C/4;
+
+    A = eye(n_cells) + alpha * diag(ones(n_cells-1,1), 1) - alpha * diag(ones(n_cells-1,1), -1);
+    A(1, end) = -alpha;      
+    A(end, 1) = alpha; 
+
+    phi_exp = phi + alpha * [phi(end); phi(1:end-1)] - alpha * [phi(2:end); phi(1)]; 
+    
+    phi_new = A \ phi_exp; % 1st time step
+
+    for i = dt:dt:2 %starting one time step after
     
         phi_new = phi_old + C * ([phi(end);phi(1:end-1)]-[phi(2:end);phi(1)]);
         phi_old = phi;
